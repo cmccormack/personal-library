@@ -1,7 +1,7 @@
 # personal-library
 Full Stack Personal Library
 
-- [X] Prevent cross site scripting(XSS attack).
+
 - [ ] Nothing from my website will be cached in my client as a security measure.
 - [ ] I will see that the site is powered by 'PHP 4.2.0' even though it isn't as a security measure.
 - [ ] I can post a title to /api/books to add a book and returned will be the object with the title and a unique _id.
@@ -12,3 +12,15 @@ Full Stack Personal Library
 - [ ] If I try to request a book that doesn't exist I will get a 'no book exists' message.
 - [ ] I can send a delete request to /api/books to delete all books in the database. Returned will be 'complete delete successful' if successful.
 - [ ] All 6 functional tests requiered are complete and passing.
+
+Example usage:
+
+| API | GET | POST | DELETE |
+| --- | --- | ---- | ------ |
+| `/api/books` | list all books | add new book | delete all books |
+| `/api/books/Hatchet` | show book Hatchet | add comment to Hatchet | delete Hatchet |
+
+Completed Project:
+-----
+* https://fcc-issue-tracker-cmccormack.glitch.me/
+
