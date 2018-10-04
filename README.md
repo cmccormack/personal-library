@@ -22,5 +22,5 @@ Example usage:
 
 Completed Project:
 -----
-* https://fcc-issue-tracker-cmccormack.glitch.me/
+* https://personal-library-fcc-cmccormack.glitch.me/
 
