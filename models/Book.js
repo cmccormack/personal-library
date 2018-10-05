@@ -1,9 +1,9 @@
 const mongoose = require("mongoose")
 
 const bookSchema = new mongoose.Schema({
-  book_title: { type: String, required: true },
+  title: { type: String, required: true },
   comments: [String],
-  created_on: { type: Date, default: new Date().getTime() },
+  commentcount: { type: Number, default: 0},
 })
 
 const Book = mongoose.model("Book", bookSchema, "books")

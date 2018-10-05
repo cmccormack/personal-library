@@ -60,11 +60,6 @@ const server = app.listen(app.get("port"), () => {
       console.log('Running Tests...');
       setTimeout(async () => {
         try {
-          // Delete all test issues
-          // await Issue.deleteMany({project_name: 'test'}, err => {
-          //   if (err) throw err.message
-          //   console.log("Successfully wiped 'issues' collection")
-          // })
           runner.run()
         } catch(e) {
           const error = e
