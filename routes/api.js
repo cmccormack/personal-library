@@ -94,22 +94,15 @@ module.exports = () => {
 
 
     // ** DELETE ** request
-    .delete(book_id_validation, (req, res, next) => {
-      if (!req.body._id) {
-        return next(Error('_id error'))
-      }
+    .delete((req, res, next) => {
 
-      if (!validationResult(req).isEmpty()) {
-        return next(Error(`could not delete ${req.body._id}`))
-      }
+      Book.deleteMany({}, (err, book) => {
 
-      Book.findOneAndRemove({_id: req.body._id}, (err, book) => {
-
-        if (err || !book) {
-          return next(Error(`could not delete ${req.body._id}`))
+        if (err) {
+          return next(Error('could not delete books'))
         }
 
-        res.send(`deleted ${req.body._id}`)
+        res.json({success: true, message: 'complete delete successful'})
       })
     })
 
@@ -146,7 +139,7 @@ module.exports = () => {
 
     // ** POST ** request
     .post(book_comment_validation, book_id_validation, (req, res, next) => {
-      
+
       // Check validation and exit early if unsuccessful 
       const errors = validationResult(req)
       if (!errors.isEmpty()) {
@@ -156,7 +149,16 @@ module.exports = () => {
       const { _id } = req.params
       const { comment } = req.body
 
-      Book.findByIdAndUpdate(_id, {$push: { comments: comment }}, { new: true })
+      Book.findByIdAndUpdate(_id,
+        {
+          $push: { comments: comment },
+          $inc: { commentcount: 1 },
+        },
+        {
+          new: true,
+          select: 'title comments'
+        },
+      )
         .exec((err, doc) => {
           if (err) {
             return next(Error(err))
@@ -164,30 +166,32 @@ module.exports = () => {
           if (!doc) {
             return next(Error(`Book with _id ${_id} not found`))
           }
-          // Cleanup doc before sending
+
           res.json(doc)
         })
-      //json res format same as .get
     })
 
 
     // ** DELETE ** request
     .delete(book_id_validation, (req, res, next) => {
-      if (!req.body._id) {
+
+      const { _id } = req.params
+
+      if (!_id) {
         return next(Error('_id error'))
       }
 
       if (!validationResult(req).isEmpty()) {
-        return next(Error(`could not delete ${req.body._id}`))
+        return next(Error('no book exists'))
       }
 
-      Book.findOneAndRemove({_id: req.body._id}, (err, book) => {
+      Book.findByIdAndRemove(_id, (err, book) => {
 
         if (err || !book) {
-          return next(Error(`could not delete ${req.body._id}`))
+          return next(Error('no book exists'))
         }
 
-        res.send('delete successful')
+        res.json({success: true, message: 'delete successful'})
       })
     })
 
