@@ -43,6 +43,27 @@ body, html {
     font-weight: 400;
   }
 
+  table, th, td {
+    border: 2px solid rgba(0,0,0,0.6);
+    border-collapse: collapse;
+  }
+
+  th {
+    background-color: rgba(0,0,0,0.6);
+    color: #f9dd76;
+    font-weight: 400;
+    padding: 4px;
+  }
+
+  td {
+    padding: 4px;
+    text-align: center;
+  }
+
+  td pre {
+    float: none;
+  }
+
   pre {
     background-color: #f9dd76;
     padding: 2px 8px;
