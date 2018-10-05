@@ -23,91 +23,82 @@ html
         main
             section#example_usage
                 span.section-title Example Usage
-                pre /api/issues/{project}
-                pre /api/issues/{project}?open=true&assigned_to=Chris
+                //- pre /api/issues/{project}
+                //- pre /api/issues/{project}?open=true&assigned_to=Chris
+                table
+                    tr
+                        th API
+                        th GET
+                        th POST
+                        th DELETE
+                    tr
+                        td
+                            pre /api/books
+                        td list all books
+                        td add new book
+                        td delete all books
+                    tr
+                        td
+                            pre /api/books/Hatchet
+                        td show book Hatchet
+                        td add comment to Hatchet
+                        td delete Hatchet
+
             section#example_return
                 span.section-title Example Return
+                pre GET /api/books
                 pre.
                     [{
-                        "_id":"5871dda29faedc3491ff93bb",
-                        "issue_title":"Fix error in posting data",
-                        "issue_text":"When we post data it has an error and ...",
-                        "created_on":"2017-01-08T06:35:14.240Z",
-                        "updated_on":"2017-01-08T06:35:14.240Z",
-                        "created_by":"Chris",
-                        "assigned_to":"Jason",
-                        "open":true,
-                        "status_text":"In Dev"
-                    }] 
+                        commentcount: 0,
+                        _id: '5bb7db3505c9f910f1a04381',
+                        title: 'My Side of the Mountain'
+                    },
+                    {
+                        commentcount: 1,
+                        _id: '5bb7db3505c9f910f1a04380',
+                        title: 'Hatchet'
+                    }]
+                pre GET /api/books/5bb7dbbc54969910fe991095
+                pre.
+                    {
+                        comments: ['Favorite childhood book!'],
+                        _id: '5bb7dbbc54969910fe991095',
+                        title: 'Hatchet'
+                    }
             section#try_it
                 span.section-title Try It Yourself!
-                form#new_ticket_form(action="/api/issues/apitest")
-                    span.form-title submit new issue
+                form#new_book_form(action="/api/books/" method="POST")
+                    span.form-title add new book
                     div.input-row
-                        label(for="title_input") Issue Title
+                        label(for="title_input") Book Title
                             span  - Required
-                        input#title_input(type="text" placeholder="Fix error in posting data" name="title" required value="test name")
-                    div.input-row
-                        label(for="text_input") Issue Text
-                            span  - Required
-                        textarea#text_input(rows=3 placeholder="When we post data it has an error and ..." name="text" required) test text
-                    div.input-row
-                        label(for="createdBy_input") Created By
-                            span  - Required
-                        input#createdBy_input(type="text" placeholder="Chris" name="createdBy" required value="test createdBy")
-                    div.input-row
-                        label(for="assignedTo_input") Assigned To
-                            span  - Optional
-                        input#assignedTo_input(type="text" placeholder="Jason" name="assignedTo" value="test assignedTo")
-                    div.input-row
-                        label(for="statusText_input") Status Text
-                            span  - Optional
-                        input#statusText_input(type="text" placeholder="In Dev" name="statusText" value="test statusText")
+                        input#title_input(type="text" placeholder="My Side of the Mountain" name="title" required)
                     button.submit-btn(type="submit") Add
                     
                     div.input-row
                         pre#try_it_new.output.hidden
 
-                form#update_ticket_form(action="/api/issues/apitest")
-                    span.form-title update issue
+                form#add_comment_form(action="/api/books/:_id" method="POST")
+                    span.form-title add comment to book
                     div.input-row
-                        label(for="id_input") Issue ID
+                        label(for="id_input") Book ID
                             span  - Required
-                        input#id_input(type="text" placeholder="5871dda29faedc3491ff93bb" name="id" /*required*/ value="5871dda29faedc3491ff93bb")
+                        input#id_input(type="text" placeholder="5bb7dbbc54969910fe991095" name="_id" required)
                     div.input-row
-                        label(for="title_input") Issue Title
-                            span  - Optional
-                        input#title_input(type="text" placeholder="Fix error in posting data" name="title" value="test name")
-                    div.input-row
-                        label(for="text_input") Issue Text
-                            span  - Optional
-                        textarea#text_input(rows=3 placeholder="When we post data it has an error and ..." name="text") test text
-                    div.input-row
-                        label(for="createdBy_input") Created By
-                            span  - Optional
-                        input#createdBy_input(type="text" placeholder="Chris" name="createdBy" value="test createdBy")
-                    div.input-row
-                        label(for="assignedTo_input") Assigned To
-                            span  - Optional
-                        input#assignedTo_input(type="text" placeholder="Jason" name="assignedTo" value="test assignedTo")
-                    div.input-row
-                        label(for="statusText_input") Status Text
-                            span  - Optional
-                        input#statusText_input(type="text" placeholder="In Dev" name="statusText" value="test statusText")
-                    div.input-row.checkboxes
-                        input#closeIssue_input(type="checkbox" name="closeIssue" value="Close Ticket")
-                        label(for="closeIssue_input") Close Issue?
+                        label(for="comment_input") Comment
+                            span  - Required
+                        input#comment_input(type="text" placeholder="My second favorite childhood book!" name="comment")
                     button.submit-btn(type="submit") Update
-                    
+
                     div.input-row
-                        pre#try_it_update.output.hidden
+                        pre#try_it_add_comment.output.hidden
                 
-                form#delete_ticket_form(action="/api/issues/apitest")
-                    span.form-title delete issue
+                form#delete_book_form(action="/api/books/:_id")
+                    span.form-title delete book
                     div.input-row
-                        label(for="delete_id_input") Issue ID
+                        label(for="delete_id_input") Book ID
                             span  - Required
-                        input#delete_id_input(type="text" placeholder="5871dda29faedc3491ff93bb" name="id" required value="5871dda29faedc3491ff93bb")
+                        input#delete_id_input(type="text" placeholder="5bb7dbbc54969910fe991095" name="_id" required )
                     button.submit-btn(type="submit") Delete
                 
                     div.input-row
@@ -146,49 +137,37 @@ script.
             })
     )
 
-    document.getElementById('new_ticket_form').addEventListener('submit', e => {
+    document.getElementById('new_book_form').addEventListener('submit', e => {
         e.preventDefault()
-        const output = document.getElementById('try_it_new')
-        const {title, text, createdBy, assignedTo, statusText} = e.target
+        const {title} = e.target
         const endpoint = e.target.getAttribute('action')
+        const output = document.getElementById('try_it_new')
         const body = {
-            issue_title: title.value,
-            issue_text: text.textContent,
-            created_by: createdBy.value,
-            assigned_to: assignedTo.value,
-            status_text: statusText.value
+            title: title.value,
         }
 
-        // POST request to add new issue
         fetchJSON(endpoint, 'POST', body).then(displayResponse.bind(null, output))
     })
 
-    document.getElementById('update_ticket_form').addEventListener('submit', e => {
+    document.getElementById('add_comment_form').addEventListener('submit', e => {
         e.preventDefault()
-        const output = document.getElementById('try_it_update')
-        const {id, title, text, createdBy, assignedTo, statusText, closeIssue} = e.target
-        const endpoint = e.target.getAttribute('action')
+        const {_id, comment} = e.target
+        const endpoint = e.target.getAttribute('action').replace(':_id', _id.value)
+        const output = document.getElementById('try_it_add_comment')
         const body = {
-            _id: id.value,
-            issue_title: title.value,
-            issue_text: text.value,
-            created_by: createdBy.value,
-            assigned_to: assignedTo.value,
-            status_text: statusText.value,
-            open: !closeIssue.checked,
+            _id: _id.value,
+            comment: comment.value,
         }
 
-        // PUT request to update existing issue
-        fetchJSON(endpoint, 'PUT', body).then(displayResponse.bind(null, output))
+        fetchJSON(endpoint, 'POST', body).then(displayResponse.bind(null, output))
     })
 
-    document.getElementById('delete_ticket_form').addEventListener('submit', e => {
+    document.getElementById('delete_book_form').addEventListener('submit', e => {
         e.preventDefault()
-        const {id} = e.target
+        const {_id} = e.target
+        const endpoint = e.target.getAttribute('action').replace(':_id', _id.value)
         const output = document.getElementById('try_it_delete')
-        const endpoint = e.target.getAttribute('action')
-        const body = { _id: id.value }
+        const body = { _id: _id.value }
 
-        // DELETE request to delete existing issue
         fetchJSON(endpoint, 'DELETE', body).then(displayResponse.bind(null, output))
     })
