@@ -31,6 +31,8 @@ const app = express()
 app.set("port", process.env.PORT || 3000)
 
 app.use(helmet())
+app.use(helmet.noCache())
+app.use(helmet.hidePoweredBy({ setTo: 'PHP 4.2.0' }))
 
 app.use(bodyParser.urlencoded({ extended: false, }))
 app.use(bodyParser.json())
