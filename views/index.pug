@@ -23,8 +23,6 @@ html
         main
             section#example_usage
                 span.section-title Example Usage
-                //- pre /api/issues/{project}
-                //- pre /api/issues/{project}?open=true&assigned_to=Chris
                 table
                     tr
                         th API
@@ -93,7 +91,8 @@ html
                     div.input-row
                         pre#try_it_add_comment.output.hidden
                 
-                form#delete_book_form(action="/api/books/:_id")
+
+                form#delete_book_form(action="/api/books/:_id" method="DELETE")
                     span.form-title delete book
                     div.input-row
                         label(for="delete_id_input") Book ID
@@ -103,6 +102,23 @@ html
                 
                     div.input-row
                         pre#try_it_delete.output.hidden
+
+                form#delete_books_form(action="/api/books" method="DELETE")
+                    span.form-title delete all books
+                    div.input-row
+                    button.submit-btn(type="submit") Delete All
+                    
+                    div.input-row
+                        pre#try_it_delete_all.output.hidden
+
+
+                form#view_all_books_form(action="/api/books" method="GET")
+                    span.form-title view all books
+                    div.input-row
+                    button.submit-btn(type="submit") View All
+                
+                    div.input-row
+                        pre#try_it_view_all.output.hidden
 
 script.
     forms = document.querySelectorAll('form')
@@ -121,7 +137,7 @@ script.
         output.classList.remove('hidden')
     }
 
-    const fetchJSON = (endpoint, method, body) => (
+    const fetchJSON = (endpoint, method, body=undefined) => (
         fetch(endpoint, {
             method,
             headers: { "Content-Type": "application/json; charset=utf-8" },
@@ -139,19 +155,19 @@ script.
 
     document.getElementById('new_book_form').addEventListener('submit', e => {
         e.preventDefault()
-        const {title} = e.target
+        const {method, title} = e.target
         const endpoint = e.target.getAttribute('action')
         const output = document.getElementById('try_it_new')
         const body = {
             title: title.value,
         }
 
-        fetchJSON(endpoint, 'POST', body).then(displayResponse.bind(null, output))
+        fetchJSON(endpoint, method, body).then(displayResponse.bind(null, output))
     })
 
     document.getElementById('add_comment_form').addEventListener('submit', e => {
         e.preventDefault()
-        const {_id, comment} = e.target
+        const {method, _id, comment} = e.target
         const endpoint = e.target.getAttribute('action').replace(':_id', _id.value)
         const output = document.getElementById('try_it_add_comment')
         const body = {
@@ -159,7 +175,7 @@ script.
             comment: comment.value,
         }
 
-        fetchJSON(endpoint, 'POST', body).then(displayResponse.bind(null, output))
+        fetchJSON(endpoint, method, body).then(displayResponse.bind(null, output))
     })
 
     document.getElementById('delete_book_form').addEventListener('submit', e => {
@@ -167,7 +183,23 @@ script.
         const {_id} = e.target
         const endpoint = e.target.getAttribute('action').replace(':_id', _id.value)
         const output = document.getElementById('try_it_delete')
-        const body = { _id: _id.value }
 
         fetchJSON(endpoint, 'DELETE', body).then(displayResponse.bind(null, output))
+    })
+
+    document.getElementById('delete_books_form').addEventListener('submit', e => {
+        e.preventDefault()
+        const endpoint = e.target.getAttribute('action')
+        const output = document.getElementById('try_it_delete_all')
+
+        fetchJSON(endpoint, 'DELETE', body).then(displayResponse.bind(null, output))
+    })
+
+    document.getElementById('view_all_books_form').addEventListener('submit', e => {
+        e.preventDefault()
+        const {method} = e.target
+        const endpoint = e.target.getAttribute('action')
+        const output = document.getElementById('try_it_view_all')
+
+        fetchJSON(endpoint, method).then(displayResponse.bind(null, output))
     })
