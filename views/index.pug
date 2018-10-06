@@ -90,6 +90,18 @@ html
 
                     div.input-row
                         pre#try_it_add_comment.output.hidden
+
+   
+                form#view_book_form(action="/api/books/:_id" method="GET")
+                    span.form-title view a single book
+                    div.input-row
+                        label(for="id_view_input") Book ID
+                            span  - Required
+                        input#id_view_input(type="text" placeholder="5bb7dbbc54969910fe991095" name="_id" required)
+                    button.submit-btn(type="submit") View Book
+                
+                    div.input-row
+                        pre#try_it_view.output.hidden
                 
 
                 form#delete_book_form(action="/api/books/:_id" method="DELETE")
@@ -178,13 +190,22 @@ script.
         fetchJSON(endpoint, method, body).then(displayResponse.bind(null, output))
     })
 
+    document.getElementById('view_book_form').addEventListener('submit', e => {
+        e.preventDefault()
+        const {method, _id, comment} = e.target
+        const endpoint = e.target.getAttribute('action').replace(':_id', _id.value)
+        const output = document.getElementById('try_it_view')
+
+        fetchJSON(endpoint, method).then(displayResponse.bind(null, output))
+    })
+
     document.getElementById('delete_book_form').addEventListener('submit', e => {
         e.preventDefault()
         const {_id} = e.target
         const endpoint = e.target.getAttribute('action').replace(':_id', _id.value)
         const output = document.getElementById('try_it_delete')
 
-        fetchJSON(endpoint, 'DELETE', body).then(displayResponse.bind(null, output))
+        fetchJSON(endpoint, 'DELETE').then(displayResponse.bind(null, output))
     })
 
     document.getElementById('delete_books_form').addEventListener('submit', e => {
@@ -192,7 +213,7 @@ script.
         const endpoint = e.target.getAttribute('action')
         const output = document.getElementById('try_it_delete_all')
 
-        fetchJSON(endpoint, 'DELETE', body).then(displayResponse.bind(null, output))
+        fetchJSON(endpoint, 'DELETE').then(displayResponse.bind(null, output))
     })
 
     document.getElementById('view_all_books_form').addEventListener('submit', e => {
