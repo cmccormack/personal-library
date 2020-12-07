@@ -1,5 +1,6 @@
 const path = require("path")
 const helmet = require("helmet")
+const nocache = require("nocache")
 const express = require("express")
 const bodyParser = require("body-parser")
 const mongoose = require('mongoose')
@@ -12,7 +13,7 @@ require('dotenv').config({ path: path.resolve(__dirname, '.env') })
 const { dbuser, dbpw, dbhost, dbname } = process.env
 mongoose.Promise = global.Promise
 mongoose.set('useFindAndModify', false)
-mongoose.connect(`mongodb://${dbuser}:${dbpw}@${dbhost}/${dbname}`, { useNewUrlParser: true })
+mongoose.connect(`mongodb+srv://${dbuser}:${dbpw}@${dbhost}/${dbname}`, { useNewUrlParser: true, useUnifiedTopology: true })
 
 // The connection used by default for every model created using mongoose.model
 const db = mongoose.connection
@@ -31,8 +32,9 @@ const app = express()
 app.set("port", process.env.PORT || 3000)
 
 app.use(helmet())
-app.use(helmet.noCache())
 app.use(helmet.hidePoweredBy({ setTo: 'PHP 4.2.0' }))
+
+app.use(nocache())
 
 app.use(bodyParser.urlencoded({ extended: false, }))
 app.use(bodyParser.json())
